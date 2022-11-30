@@ -14,6 +14,9 @@ using namespace threepp;
 class Canvas::Impl {
 
 public:
+
+    GLFWwindow *window_;
+
     explicit Impl(const Canvas::Parameters &params) : size_(params.size_) {
         glfwSetErrorCallback(error_callback);
 
@@ -30,8 +33,8 @@ public:
             glfwWindowHint(GLFW_SAMPLES, params.antialiasing_);
         }
 
-        window = glfwCreateWindow(params.size_.width, params.size_.height, params.title_.c_str(), nullptr, nullptr);
-        if (!window) {
+        window_ = glfwCreateWindow(params.size_.width, params.size_.height, params.title_.c_str(), nullptr, nullptr);
+        if (!window_) {
             glfwTerminate();
             exit(EXIT_FAILURE);
         }
@@ -43,18 +46,18 @@ public:
             images[0] = {static_cast<int>(favicon.width),
                          static_cast<int>(favicon.height),
                          favicon.getData()};
-            glfwSetWindowIcon(window, 1, images);
+            glfwSetWindowIcon(window_, 1, images);
         }
 
-        glfwSetWindowUserPointer(window, this);
+        glfwSetWindowUserPointer(window_, this);
 
-        glfwSetKeyCallback(window, key_callback);
-        glfwSetMouseButtonCallback(window, mouse_callback);
-        glfwSetCursorPosCallback(window, cursor_callback);
-        glfwSetScrollCallback(window, scroll_callback);
-        glfwSetWindowSizeCallback(window, window_size_callback);
+        glfwSetKeyCallback(window_, key_callback);
+        glfwSetMouseButtonCallback(window_, mouse_callback);
+        glfwSetCursorPosCallback(window_, cursor_callback);
+        glfwSetScrollCallback(window_, scroll_callback);
+        glfwSetWindowSizeCallback(window_, window_size_callback);
 
-        glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(window_);
         gladLoadGL();
         glfwSwapInterval(1);
 
@@ -72,26 +75,27 @@ public:
     }
 
     void setSize(WindowSize size) const {
-        glfwSetWindowSize(window, size.width, size.height);
+        glfwSetWindowSize(window_, size.width, size.height);
     }
 
     void animate(const std::function<void()> &f) const {
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window_)) {
 
             f();
 
-            glfwSwapBuffers(window);
+            glfwSwapBuffers(window_);
             glfwPollEvents();
+
         }
     }
 
     void animate(const std::function<void(float)> &f) const {
         Clock clock;
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window_)) {
 
             f(clock.getDelta());
 
-            glfwSwapBuffers(window);
+            glfwSwapBuffers(window_);
             glfwPollEvents();
         }
     }
@@ -129,13 +133,13 @@ public:
     }
 
     ~Impl() {
-        glfwDestroyWindow(window);
+        glfwDestroyWindow(window_);
         glfwTerminate();
     }
 
-private:
-    GLFWwindow *window;
 
+
+private:
     WindowSize size_;
     Vector2 lastMousePos{};
 
@@ -220,7 +224,9 @@ private:
     }
 };
 
-Canvas::Canvas(const Canvas::Parameters &params) : pimpl_(new Impl(params)) {}
+Canvas::Canvas(const Canvas::Parameters &params) : pimpl_(new Impl(params)) {
+    window = pimpl_->window_;
+}
 
 void Canvas::animate(const std::function<void()> &f) const {
 

@@ -1,6 +1,10 @@
 
 #include "threepp/threepp.hpp"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 using namespace threepp;
 
 int main() {
@@ -13,10 +17,11 @@ int main() {
 
     GLRenderer renderer(canvas);
     renderer.setClearColor(Color::aliceblue);
+    renderer.setSize(canvas.getSize());
 
     const auto boxGeometry = BoxGeometry::create();
     const auto boxMaterial = MeshBasicMaterial::create();
-    boxMaterial->color.setRGB(1,0,0);
+    boxMaterial->color.setRGB(1, 0, 0);
     boxMaterial->transparent = true;
     boxMaterial->opacity = 0.1f;
     auto box = Mesh::create(boxGeometry, boxMaterial);
@@ -40,17 +45,42 @@ int main() {
     plane->position.setZ(-2);
     scene->add(plane);
 
-    canvas.onWindowResize([&](WindowSize size){
-      camera->aspect = size.getAspect();
-      camera->updateProjectionMatrix();
-      renderer.setSize(size);
+    canvas.onWindowResize([&](WindowSize size) {
+        camera->aspect = size.getAspect();
+        camera->updateProjectionMatrix();
+        renderer.setSize(size);
     });
+
+    auto window = (GLFWwindow *) canvas.window;
+
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+
+    ImGuiIO &io = ImGui::GetIO();
+    ImGui::StyleColorsDark();
+
 
     box->rotation.setOrder(Euler::YZX);
     canvas.animate([&](float dt) {
-        box->rotation.y +=  0.5f * dt;
+        box->rotation.y += 0.5f * dt;
         scene->rotation.x += 1.f * dt;
 
         renderer.render(scene, camera);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::SetNextWindowPos(ImVec2(0, 0), 0, ImVec2(0,0));
+        ImGui::Begin("Hello, world!");
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     });
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }

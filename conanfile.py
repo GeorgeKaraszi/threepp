@@ -1,6 +1,5 @@
 from os import path
 from conans import ConanFile, CMake, tools
-from conan.tools.cmake import CMakeDeps
 
 class ThreeppConan(ConanFile):
     name = "threepp"
@@ -21,10 +20,12 @@ class ThreeppConan(ConanFile):
     )
 
     options = {
+        "with_imgui": [True, False],
         "with_bullet": [True, False]
     }
 
     default_options = (
+        "with_imgui=True",
         "with_bullet=False",
         "glad:gl_version=4.1"
     )
@@ -33,8 +34,14 @@ class ThreeppConan(ConanFile):
         self.version = tools.load(path.join(self.recipe_folder, "version.txt")).strip()
 
     def requirements(self):
+        if self.options.with_imgui:
+            self.requires("imgui/1.74")
         if self.options.with_bullet:
             self.requires("bullet3/3.24")
+
+    def imports(self):
+        pass
+        #self.copy("./res/bindings", dst=)
 
     def configure_cmake(self):
         cmake = CMake(self)

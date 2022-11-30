@@ -25,6 +25,8 @@ namespace threepp {
     public:
         struct Parameters;
 
+        const void* window;
+
         explicit Canvas(const Parameters &params = Parameters());
 
         [[nodiscard]] WindowSize getSize() const;

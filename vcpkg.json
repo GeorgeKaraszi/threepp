@@ -7,6 +7,15 @@
     "stb"
   ],
   "features": {
+    "imgui": {
+      "description": "Enable user interfaces in examples",
+      "dependencies": [
+        {
+          "name": "imgui",
+          "features": ["glfw-binding", "opengl3-binding"]
+        }
+      ]
+    },
     "bullet": {
       "description": "Enable bullet physics in examples",
       "dependencies": [
