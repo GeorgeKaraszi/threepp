@@ -105,7 +105,7 @@ install(
         ${CMAKE_INSTALL_DATADIR}/threepp)
 
 install(TARGETS threepp EXPORT threepp-targets)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY include/threepp DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(EXPORT threepp-targets
         NAMESPACE threepp::
         DESTINATION ${CMAKE_INSTALL_DATADIR}/threepp)
