@@ -20,6 +20,17 @@ list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/conan.cmake)
+
+conan_cmake_run(
+        CONANFILE conanfile.py
+        BASIC_SETUP CMAKE_TARGETS
+        BUILD missing
+        OPTIONS
+        with_bullet=True
+        with_assimp=True
+)
+
 # ==============================================================================
 # Dependencies
 # ==============================================================================
