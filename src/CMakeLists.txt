@@ -1,4 +1,4 @@
-set(publicHeaderDir ${CMAKE_SOURCE_DIR}/include)
+set(publicHeaderDir ${THREEPP_DIR}/include)
 
 set(publicHeaders
 
@@ -267,7 +267,7 @@ set(THREEPP_SHADER_INCLUDES)
 set(THREEPP_SHADERCHUNK_CODE)
 set(THREEPP_SHADERLIB_CODE)
 
-file(GLOB files "${CMAKE_SOURCE_DIR}/data/shaders/ShaderChunk/*.glsl")
+file(GLOB files "${THREEPP_DIR}/data/shaders/ShaderChunk/*.glsl")
 foreach(shaderFile ${files})
     get_filename_component(fileName ${shaderFile} NAME_WLE)
     set(header_file "${generatedSourcesDir}/threepp/renderers/shaders/ShaderChunk/${fileName}.hpp")
@@ -292,7 +292,7 @@ const char* ${fileName}=R\"(${text})\";\n\n\
 
 endforeach()
 
-file(GLOB files "${CMAKE_SOURCE_DIR}/data/shaders/ShaderLib/*.glsl")
+file(GLOB files "${THREEPP_DIR}/data/shaders/ShaderLib/*.glsl")
 foreach(shaderFile ${files})
     get_filename_component(fileName ${shaderFile} NAME_WLE)
     set(header_file "${generatedSourcesDir}/threepp/renderers/shaders/ShaderLib/${fileName}.hpp")
@@ -333,7 +333,7 @@ target_link_libraries(threepp
         stb::stb)
 target_include_directories(threepp
         PUBLIC
-        "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
+        "$<BUILD_INTERFACE:${THREEPP_DIR}/include>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
         PRIVATE
         "${generatedSourcesDir}"

@@ -1,16 +1,18 @@
 cmake_minimum_required(VERSION 3.15)
-file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" projectVersion)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" projectVersion)
 project(threepp VERSION ${projectVersion})
 message("Current ${PROJECT_NAME} version: ${CMAKE_PROJECT_VERSION}\n")
 
 option(THREEPP_BUILD_EXAMPLES "Build examples" ON)
 option(THREEPP_BUILD_TESTS "Build test suite" ON)
 
+set(THREEPP_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 # ==============================================================================
 # Global internal configuration
 # ==============================================================================
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -76,9 +78,9 @@ endif ()
 # ==============================================================================
 
 # Data files
-file(COPY "${CMAKE_SOURCE_DIR}/data/favicon.bmp" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
-file(COPY "${CMAKE_SOURCE_DIR}/data/models" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/data)
-file(COPY "${CMAKE_SOURCE_DIR}/data/textures" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/data)
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/data/favicon.bmp" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/data/models" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/data)
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/data/textures" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/data)
 
 # ==============================================================================
 # Exports and remaining installation
