@@ -24,7 +24,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/conan.cmake)
 
 conan_cmake_run(
         CONANFILE conanfile.py
-        BASIC_SETUP CMAKE_TARGETS
         BUILD missing
         OPTIONS
         with_bullet=True
